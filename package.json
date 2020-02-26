@@ -7,6 +7,7 @@
   "main": "./runkod.js",
   "dependencies": {
     "axios": "^0.19.2",
+    "chalk": "^3.0.0",
     "netrc": "^0.1.4",
     "prompt": "^1.0.0"
   },
