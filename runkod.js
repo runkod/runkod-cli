@@ -17,7 +17,7 @@ module.exports = function (config) {
     var cmdList = [
       'login', 'logout', 'whoami',
       'deploy',
-      'list', 'create', 'delete', 'redirect', 'stop', 'pause', 'start',
+      'list', 'show', 'create', 'delete', 'redirect', 'stop', 'pause', 'start',
       'domains', 'add_domain', 'delete_domain', 'attach_domain', 'detach_domain'
     ];
 
