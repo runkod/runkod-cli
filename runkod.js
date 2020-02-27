@@ -10,41 +10,13 @@ module.exports = function (config) {
 
   config.api = api(config.endpoint);
 
-  var runkod = function (args) {
+  return function (args) {
     var cmd = args[0];
 
-    var commands = ['login', 'logout', 'deploy', 'whoami', 'list'];
+    var cmdList = ['login', 'logout', 'whoami', 'deploy', 'list', 'create', 'stop', 'pause', 'delete', 'custom_domain'];
 
-    if (commands.indexOf(cmd) !== -1) {
-      // argv.shift();
-      runkod[cmd](config)
+    if (cmdList.indexOf(cmd) !== -1) {
+      commands(config).call(cmd)
     }
-
-    /*
-    else if(config.default && commands.indexOf(config.default) !== -1 ){
-      surge[config.default]({})(argv)
-    }*/
   };
-
-  runkod.login = function () {
-    return commands.login(config);
-  };
-
-  runkod.logout = function () {
-    return commands.logout(config);
-  };
-
-  runkod.deploy = function () {
-    return commands.deploy(config);
-  };
-
-  runkod.whoami = function () {
-    return commands.whoami(config);
-  };
-
-  runkod.list = function () {
-    return commands.list(config);
-  };
-
-  return runkod;
 };
