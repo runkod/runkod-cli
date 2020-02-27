@@ -1,14 +1,15 @@
 var api = require('./lib/api');
 var commands = require('./lib/commands');
+var packJs = require('./package.json');
 
 module.exports = function (config) {
   config = config || {};
 
   if (!config.hasOwnProperty('endpoint')) {
-    config.endpoint = 'https://api.runkod.com/api';
+    config.endpoint = 'https://api.runkod.com';
   }
 
-  config.api = api(config.endpoint);
+  config.api = api(packJs.version, config.endpoint);
 
   return function (args) {
     var cmd = args[0];
