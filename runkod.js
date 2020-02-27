@@ -13,7 +13,12 @@ module.exports = function (config) {
   return function (args) {
     var cmd = args[0];
 
-    var cmdList = ['login', 'logout', 'whoami', 'deploy', 'list', 'create', 'stop', 'pause', 'delete', 'custom_domain'];
+    var cmdList = [
+      'login', 'logout', 'whoami',
+      'deploy',
+      'list', 'create', 'delete', 'redirect', 'stop', 'pause', 'start',
+      'domains', 'add_domain', 'delete_domain', 'attach_domain', 'detach_domain'
+    ];
 
     if (cmdList.indexOf(cmd) !== -1) {
       commands(config).call(cmd)
