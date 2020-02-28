@@ -9,8 +9,11 @@
     "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "cli-table3": "^0.5.1",
+    "glob": "^7.1.6",
     "inquirer": "^7.0.4",
-    "netrc": "^0.1.4"
+    "jszip": "^3.2.2",
+    "netrc": "^0.1.4",
+    "read": "^1.0.7"
   },
   "devDependencies": {},
   "license": "ISC",
