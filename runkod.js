@@ -1,6 +1,9 @@
+var minimist = require('minimist');
+
 var api = require('./lib/api');
 var commands = require('./lib/commands');
 var packJs = require('./package.json');
+
 
 module.exports = function (config) {
   config = config || {};
@@ -11,13 +14,22 @@ module.exports = function (config) {
 
   config.api = api(packJs.version, config.endpoint);
 
+  var argvOptions = {
+    alias: {
+      p: 'project',
+      f: 'folder'
+    }
+  };
+
   return function (args) {
-    var cmd = args[0];
+    var argv = minimist(args, argvOptions);
+    var cmd = argv._[0];
+    config.argv = argv;
 
     var cmdList = [
       'login', 'logout', 'whoami',
       'deploy',
-      'list', 'show', 'create', 'delete', 'status', 'redirect',
+      'list', 'create', 'delete', 'status', 'redirect',
       'domains', 'add_domain', 'delete_domain', 'attach_domain', 'detach_domain'
     ];
 
