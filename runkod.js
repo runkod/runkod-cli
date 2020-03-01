@@ -2,8 +2,8 @@ var minimist = require('minimist');
 
 var api = require('./lib/api');
 var commands = require('./lib/commands');
+var help = require('./lib/help.js');
 var packJs = require('./package.json');
-
 
 module.exports = function (config) {
   config = config || {};
@@ -27,14 +27,18 @@ module.exports = function (config) {
     config.argv = argv;
 
     var cmdList = [
-      'version', 'help',
       'login', 'logout', 'whoami',
-      'deploy',
-      'list', 'show', 'create', 'status'
+      'deploy', 'list', 'show', 'create', 'status'
     ];
 
     if (cmdList.indexOf(cmd) !== -1) {
       commands(config).call(cmd)
+    } else if (cmd === 'help') {
+      help();
+    } else if (cmd === 'version') {
+      console.log('Runkod ' + packJs.version);
+    } else {
+      commands(config).call('deploy');
     }
   };
 };
