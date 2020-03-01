@@ -8,7 +8,7 @@ var packJs = require('./package.json');
 module.exports = function (config) {
   config = config || {};
 
-  if (!config.hasOwnProperty('endpoint')) {
+  if (!config.endpoint) {
     config.endpoint = 'https://api.runkod.com';
   }
 
@@ -29,8 +29,7 @@ module.exports = function (config) {
     var cmdList = [
       'login', 'logout', 'whoami',
       'deploy',
-      'list', 'show', 'create', 'delete', 'status', 'redirect',
-      'domains', 'add_domain', 'delete_domain', 'attach_domain', 'detach_domain'
+      'list', 'show', 'create', 'delete', 'status'
     ];
 
     if (cmdList.indexOf(cmd) !== -1) {
