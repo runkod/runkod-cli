@@ -27,6 +27,7 @@ module.exports = function (config) {
     config.argv = argv;
 
     var cmdList = [
+      'version',
       'login', 'logout', 'whoami',
       'deploy',
       'list', 'show', 'create', 'delete', 'status'

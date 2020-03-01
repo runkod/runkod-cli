@@ -1,7 +1,7 @@
 {
   "name": "runkod-cli",
-  "version": "0.0.0",
-  "description": "Runkod CLI Client",
+  "version": "0.0.1",
+  "description": "Runkod command line interface",
   "author": "Runkod <hello@runkod.com>",
   "bin": "./cli.js",
   "main": "./runkod.js",
@@ -28,11 +28,5 @@
     "test"
   ],
   "scripts": {
-    "test": "mocha ./test/basic.js -t 5000",
-    "test:local": "ENDPOINT='surge.lvh.me' mocha ./test/basic -t 4000"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sintaxi/surge.git"
   }
 }
