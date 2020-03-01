@@ -27,10 +27,10 @@ module.exports = function (config) {
     config.argv = argv;
 
     var cmdList = [
-      'version',
+      'version', 'help',
       'login', 'logout', 'whoami',
       'deploy',
-      'list', 'show', 'create', 'delete', 'status'
+      'list', 'show', 'create', 'status'
     ];
 
     if (cmdList.indexOf(cmd) !== -1) {
