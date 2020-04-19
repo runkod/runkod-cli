@@ -1,9 +1,8 @@
 
+dist
 node_modules
 
 cli-dev.js
 
 .DS_Store
 .idea
-
-

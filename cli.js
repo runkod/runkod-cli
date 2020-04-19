@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-var runkod = require('./runkod')({ default: 'deploy' });
+var runkod = require('./dist')({ default: 'deploy' });
 
 runkod(process.argv.slice(2));

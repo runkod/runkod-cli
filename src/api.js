@@ -1,19 +1,19 @@
 var axios = require('axios');
 
+import got from 'got';
+
 module.exports = function (ver, baseEndpoint) {
   return {
-    token: null,
-    setToken: function (token) {
-      this.token = token;
+    apiKey: null,
+    setApiKey: function (key) {
+      this.apiKey = key;
     },
     _headers: function () {
-      return {Authentication: this.token, 'User-Agent': 'runkod-cli-' + ver};
+      return {'X-Runkod-Api-Key': this.apiKey, 'Content-Type': 'application/json', 'User-Agent': 'runkod-cli-' + ver};
     },
     _apiGet: function (path) {
-      var url = baseEndpoint + path;
-      return axios.get(url, {headers: this._headers()}).then(function (resp) {
-        return resp.data;
-      });
+      const url = baseEndpoint + path;
+      return got.get(url, {headers: this._headers(), throwHttpErrors: false}).json();
     },
     _apiPost: function (path, data) {
       var url = baseEndpoint + path;

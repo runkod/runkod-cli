@@ -1,58 +1,65 @@
-var ui = require('../ui');
-var localCreds = require('../creds');
-var helpers = require('../helpers');
-var utils = require('../utils');
-var log = require('../log');
+import to from 'await-to-js';
+
+import ui from '../ui';
+import localCreds from '../creds';
+import helpers from '../helpers';
+import utils from '../utils';
+import log from '../log';
 
 
-module.exports = function (config) {
+export default (config) => {
   return {
     call: function (cmd) {
       if (['login'].indexOf(cmd) === -1) {
-        var cred = this._getCredential();
+        const cred = this._getCredential();
+
         if (!cred) {
           console.log('');
           log.warning("You haven't logged in yet!");
           console.log('');
 
-          var self = this;
-          this.login(function () {
-            // Don't callback for logout and whoami
+          this.login(() => {
+            // Don't call callback for logout and whoami
             if (['logout', 'whoami'].indexOf(cmd) === -1) {
-              self.call(cmd);
+              this.call(cmd);
             }
           });
           return;
         }
 
-        config.api.setToken(cred);
+        config.api.setApiKey(cred);
       }
 
       this[cmd]();
     },
     _getCredential: function () {
-      var host = utils.hostFromUrl(config.endpoint);
+      const host = utils.hostFromUrl(config.endpoint);
       return localCreds(host).get();
     },
     _setCredential: function (val) {
-      var host = utils.hostFromUrl(config.endpoint);
+      const host = utils.hostFromUrl(config.endpoint);
       localCreds(host).set(val);
     },
     login: function (cb) {
-      var self = this;
+      const self = this;
 
-      var keyReceived = function (key) {
-        config.api.setToken(key);
-        config.api.me().then(function (resp) {
-          done(key, resp);
-        }).catch(function (err) {
-          helpers.handleApiError(err);
-          config.api.setToken(null);
-          self.login(cb);
-        });
+      const keyReceived = async (key) => {
+        config.api.setApiKey(key);
+
+        const resp = await config.api.me();
+
+        if (resp.code) {
+          log.error(resp.message);
+
+          config.api.setApiKey(null);
+          this.login(cb);
+          return;
+        }
+
+        done(key, resp);
       };
 
-      var done = function (key, resp) {
+      const done = (key, resp) => {
         self._setCredential(key);
         console.log('');
         log.success('👍 Logged in as ' + resp.name + '<' + resp.email + '>');

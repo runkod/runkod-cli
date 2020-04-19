@@ -1,32 +1,35 @@
-var minimist = require('minimist');
+import 'regenerator-runtime/runtime';
 
-var api = require('./lib/api');
-var commands = require('./lib/commands');
-var help = require('./lib/help.js');
-var packJs = require('./package.json');
+import minimist from 'minimist';
 
-module.exports = function (config) {
+import api from './api';
+import commands from './commands';
+import help from './help';
+import packJs from '../package';
+
+module.exports = (config) => {
   config = config || {};
 
   if (!config.endpoint) {
-    config.endpoint = 'https://api.runkod.com';
+    config.endpoint = 'https://api1.runkod.com';
   }
 
   config.api = api(packJs.version, config.endpoint);
 
-  var argvOptions = {
+  const argvOptions = {
     alias: {
       p: 'project',
       f: 'folder'
     }
   };
 
-  return function (args) {
-    var argv = minimist(args, argvOptions);
-    var cmd = argv._[0];
+  return (args) => {
+    const argv = minimist(args, argvOptions);
+    const cmd = argv._[0];
+
     config.argv = argv;
 
-    var cmdList = [
+    const cmdList = [
       'login', 'logout', 'whoami',
       'deploy', 'list', 'show', 'create', 'status'
     ];
@@ -42,3 +45,4 @@ module.exports = function (config) {
     }
   };
 };
+
