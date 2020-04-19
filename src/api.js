@@ -2,6 +2,8 @@ var axios = require('axios');
 
 import got from 'got';
 
+import log from './log';
+
 module.exports = function (ver, baseEndpoint) {
   return {
     apiKey: null,
@@ -25,7 +27,22 @@ module.exports = function (ver, baseEndpoint) {
 
       const url = `${baseEndpoint}${endpoint}`;
 
-      return got(url, init).json()
+      return got(url, init).then((r) => {
+
+        if ([400, 405].includes(r.statusCode)) {
+          log.error(`${r.statusCode} - ${r.statusMessage}`);
+          return null;
+        }
+
+        const body = JSON.parse(r.body);
+
+        if (body.code) {
+          log.error(body.message);
+          return null;
+        }
+
+        return body;
+      })
     },
     _headers: function () {
       return {'X-Runkod-Api-Key': this.apiKey, 'Content-Type': 'application/json', 'User-Agent': 'runkod-cli-' + ver};

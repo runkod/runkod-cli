@@ -1,11 +1,7 @@
-import to from 'await-to-js';
-
 import ui from '../ui';
 import localCreds from '../creds';
-import helpers from '../helpers';
 import utils from '../utils';
 import log from '../log';
-
 
 export default (config) => {
   return {
@@ -46,23 +42,21 @@ export default (config) => {
       const keyReceived = async (key) => {
         config.api.setApiKey(key);
 
-        const resp = await config.api.me();
+        const me = await config.api.me();
 
-        if (resp.code) {
-          log.error(resp.message);
-
+        if (!me) {
           config.api.setApiKey(null);
           this.login(cb);
           return;
         }
 
-        done(key, resp);
+        done(key, me);
       };
 
-      const done = (key, resp) => {
+      const done = (key, me) => {
         self._setCredential(key);
         console.log('');
-        log.success('👍 Logged in as ' + resp.name + '<' + resp.email + '>');
+        log.success('👍 Logged in as ' + me.name + '<' + me.email + '>');
         console.log('');
         if (cb) {
           cb();
