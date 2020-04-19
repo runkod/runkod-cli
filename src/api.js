@@ -8,6 +8,25 @@ module.exports = function (ver, baseEndpoint) {
     setApiKey: function (key) {
       this.apiKey = key;
     },
+    call: function (endpoint, method, body = null) {
+      const init = {
+        throwHttpErrors: false,
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'runkod-cli-' + ver,
+          'X-Runkod-Api-Key': this.apiKey
+        },
+        method
+      };
+
+      if (body) {
+        init.body = JSON.stringify(body)
+      }
+
+      const url = `${baseEndpoint}${endpoint}`;
+
+      return got(url, init).json()
+    },
     _headers: function () {
       return {'X-Runkod-Api-Key': this.apiKey, 'Content-Type': 'application/json', 'User-Agent': 'runkod-cli-' + ver};
     },
@@ -34,16 +53,13 @@ module.exports = function (ver, baseEndpoint) {
       });
     },
     me: function () {
-      return this._apiGet('/me');
+      return this.call('/me', 'GET');
     },
     getProjects: function () {
-      return this._apiGet('/projects');
+      return this.call('/projects', 'GET');
     },
     createProject: function () {
       return this._apiPost('/projects', {});
-    },
-    deleteProject: function (project_id) {
-      return this._apiDelete('/projects/' + project_id);
     },
     setProjectStatus: function (project_id, statusCode) {
       return this._apiPut('/projects/' + project_id + '/status', {status: statusCode});

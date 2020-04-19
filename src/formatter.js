@@ -1,11 +1,11 @@
-var moment = require('moment');
-var chalk = require('chalk');
+import moment from 'moment';
+import chalk from 'chalk';
 
-var constants = require('./constants');
+import * as constants from './constants';
 
-var separator = '-'.repeat(80);
+export const SEPARATOR = '-'.repeat(80);
 
-var projectName = function (project) {
+export const projectName = (project) => {
   if (project.domain && project.domain.name) {
     return project.domain.name + '(' + project.name + ')';
   }
@@ -13,7 +13,7 @@ var projectName = function (project) {
   return project.name;
 };
 
-var projectStatus = function (project) {
+export const projectStatus = (project) => {
   switch (project.status) {
     case constants.PROJECT_STATUS_ON:
       return chalk.green('On');
@@ -24,33 +24,28 @@ var projectStatus = function (project) {
   }
 };
 
-var project = function (project) {
-  var rv = '';
+export const projectFormatter = (project) => {
+  let rv = '';
 
-  var name = project.name;
-  var id = project.id;
-  var status = projectStatus(project);
-  var lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
+  const name = project.name;
+  const id = project.id;
+  const status = projectStatus(project);
+  const lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
 
-  rv += separator + '\n';
+  rv += SEPARATOR + '\n';
 
-  if (project.domain) {
-    var domainName = project.domain.name;
-    rv += chalk.inverse(domainName) + '(' + name + ')' + '\n\n';
-  } else {
-    rv += chalk.inverse(name) + '\n\n';
+  rv += chalk.inverse(name);
+
+  if (project.domainRecord) {
+    rv += ' -> ';
+    rv += chalk.inverse(project.domainRecord.name);
   }
+
+  rv += '\n\n';
 
   rv += 'ID: ' + id + '\t';
   rv += 'Status: ' + status + ' \t';
   rv += 'Last Deploy: ' + lastDeploy + '\t';
 
-  if (project.redirect_to) {
-    rv += chalk.italic('Redirects to: ' + project.redirect_to);
-  }
-
   return rv;
 };
-
-
-module.exports = {separator: separator, project: project, projectName: projectName};

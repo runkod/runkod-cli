@@ -1,38 +1,29 @@
-var chalk = require('chalk');
+import chalk from 'chalk';
+import log from '../log';
 
-var log = require('../log');
-var helpers = require('../helpers');
-var formatter = require('../formatter.js');
+import {projectFormatter, SEPARATOR} from '../formatter.js';
 
-module.exports = function (self, config) {
-  var projects = null;
+module.exports = async (self, config) => {
+  const resp = await config.api.getProjects();
 
-  config.api.getProjects().then(function (resp) {
-    projects = resp;
-  }).catch(function (err) {
-    helpers.handleApiError(err);
-  }).finally(function () {
-    if (projects !== null) {
-      done();
-    }
-  });
+  if (resp.code) {
+    log.error(resp.message);
+    return;
+  }
 
-  var done = function () {
+  if (resp.length === 0) {
+    log.bold('You have no projects.');
+    log.info('Run `runkod create` to create your first project.');
+    return;
+  }
 
-    if (projects.length === 0) {
-      log.bold('You have no projects.');
-      log.info('Run `runkod create` to create your first project.');
-      return;
-    }
+  let screen = chalk.bold(resp.length + ' project(s)') + '\n';
 
-    var screen = chalk.bold(projects.length + ' project(s)') + '\n';
+  for (let item of resp) {
+    screen += projectFormatter(item) + '\n';
+  }
 
-    for (var a = 0; a < projects.length; a++) {
-      var item = projects[a];
-      screen += formatter.project(item) + '\n';
-    }
+  screen += SEPARATOR;
 
-    screen += formatter.separator;
-    console.log(screen);
-  };
+  console.log(screen);
 };
