@@ -1,4 +1,4 @@
-import ui from '../ui';
+import * as ui from '../ui';
 import localCreds from '../creds';
 import utils from '../utils';
 import log from '../log';
@@ -61,7 +61,7 @@ export default (config) => {
         }
       };
 
-      ui.loginForm().then(keyReceived);
+      ui.passwordInput('Enter your api key:', 'Empty key received').then(keyReceived);
     },
     logout: function () {
       require('./logout')(this, config);

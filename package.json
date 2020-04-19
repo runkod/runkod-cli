@@ -9,7 +9,6 @@
     "node": ">=8"
   },
   "dependencies": {
-    "axios": "^0.19.2",
     "chalk": "^3.0.0",
     "cli-table3": "^0.5.1",
     "filesize": "^6.1.0",

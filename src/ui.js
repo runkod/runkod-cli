@@ -1,18 +1,18 @@
-var inquirer = require('inquirer');
-var ora = require('ora');
-var chalk = require('chalk');
-var read = require('read');
+import inquirer from 'inquirer';
+import ora from 'ora';
+import chalk from 'chalk';
+import read from 'read';
 
-var loginForm = function () {
-  return inquirer
+export const input = (placeholder, required = '') =>
+  inquirer
     .prompt([
       {
-        type: 'password',
+        type: 'input',
         name: 'input',
-        message: 'Enter your api key: ',
-        validate: function (a) {
-          if (a === '') {
-            return 'Empty key received';
+        message: placeholder,
+        validate: (a) => {
+          if (required && a === '') {
+            return required;
           }
 
           return true;
@@ -22,10 +22,30 @@ var loginForm = function () {
     .then(function (value) {
       return value.input;
     });
-};
 
-var folderInput = function (defaultPath) {
-  return new Promise(function (resolve) {
+export const passwordInput = (placeholder, required = '') =>
+  inquirer
+    .prompt([
+      {
+        type: 'password',
+        name: 'input',
+        message: placeholder,
+        validate: (a) => {
+          if (required && a === '') {
+            return required;
+          }
+
+          return true;
+        }
+      }
+    ])
+    .then(function (value) {
+      return value.input;
+    });
+
+
+export const folderInput = (defaultPath) =>
+  new Promise((resolve) => {
     read({
       prompt: chalk.bold('Local folder: '),
       default: defaultPath,
@@ -34,10 +54,10 @@ var folderInput = function (defaultPath) {
       resolve(answer.trim())
     })
   });
-};
 
-var select = function (title, options) {
-  var cancel = '---Cancel---';
+
+export const select = (title, options) => {
+  const cancel = '---Cancel---';
 
   options.unshift({name: cancel});
 
@@ -51,18 +71,18 @@ var select = function (title, options) {
         pageSize: 20
       }
     ])
-    .then(function (value) {
+    .then((value) => {
       if (value.name === cancel) {
         return null;
       }
 
-      return options.find(function (x) {
+      return options.find((x) => {
         return x.name === value.name;
       });
     });
 };
 
-var confirm = function (title) {
+export const confirm = (title) => {
   return inquirer
     .prompt([
       {
@@ -71,14 +91,10 @@ var confirm = function (title) {
         message: title,
         default: false
       }
-    ]).then(function (value) {
+    ]).then((value) => {
       return value.confirm;
     })
 };
 
-var spinner = function (title) {
-  return ora(title);
-};
-
-module.exports = {loginForm: loginForm, folderInput: folderInput, select: select, confirm: confirm, spinner: spinner};
+export const spinner = (title) => ora(title);
 

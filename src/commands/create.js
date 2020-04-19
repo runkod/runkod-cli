@@ -1,23 +1,16 @@
-var helpers = require('../helpers');
-var log = require('../log');
-var formatter = require('../formatter.js');
+import log from '../log';
+import * as ui from '../ui';
+import * as formatter from '../formatter.js';
 
-module.exports = function (self, config) {
-  var project = null;
+module.exports = async (self, config) => {
 
-  var done = function () {
-    log.success('✅ New project ' + project.name + ' has been created.');
-    console.log(formatter.project(project));
-    console.log(formatter.separator);
-  };
+  const name = await ui.input('Enter a project name or leave it empty for a random name: ');
+  const project = await config.api.createProject(name);
+  if (!project) {
+    return;
+  }
 
-  config.api.createProject().then(function (resp) {
-    project = resp;
-  }).catch(function (err) {
-    helpers.handleApiError(err);
-  }).finally(function () {
-    if (project !== null) {
-      done();
-    }
-  });
+  log.success('✅ New project has been created.');
+  console.log(formatter.projectFormatter(project));
+  console.log(formatter.SEPARATOR);
 };
