@@ -1,7 +1,6 @@
-var log = require('./log');
+import log from './log';
 
-
-var handleApiError = function (err) {
+export const handleApiError = function (err) {
   if (err.response && err.response.data && err.response.data.code) {
     log.error('! ' + err.response.data.code + ' - ' + err.response.data.message);
   } else {
@@ -10,35 +9,21 @@ var handleApiError = function (err) {
 };
 
 
-var resolveProject = function (projects, val) {
-  // id search
-  if (!isNaN(val)) {
-    return projects.find(function (x) {
-      return x.id === val
-    })
+export const resolveProject = (projects, val) => {
+  const byId = projects.find((x) => x.id === val);
+  if (byId) {
+    return byId;
   }
 
-  var byName = projects.find(function (x) {
-    return x.name === val
-  });
-
+  const byName = projects.find((x) => x.name === val);
   if (byName) {
     return byName;
   }
 
-  var byDomainName = projects.find(function (x) {
-    return x.domain && x.domain.name === val
-  });
-
+  const byDomainName = projects.find((x) => x.domainRecord && x.domainRecord.name === val);
   if (byDomainName) {
     return byDomainName;
   }
 
   return null;
-};
-
-
-module.exports = {
-  handleApiError: handleApiError,
-  resolveProject: resolveProject
 };

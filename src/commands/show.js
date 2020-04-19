@@ -1,50 +1,31 @@
-var ui = require('../ui');
-var log = require('../log');
-var helpers = require('../helpers');
-var formatter = require('../formatter.js');
+import ui from '../ui';
+import log from '../log';
+import * as helpers from '../helpers';
+import * as formatter from '../formatter.js';
 
-module.exports = function (self, config) {
-  var projects = null;
-  var project = null;
-
-  var show = function () {
-    console.log(formatter.project(project));
-    console.log(formatter.separator);
+module.exports = async (self, config) => {
+  const show = function (project) {
+    console.log(formatter.projectFormatter(project));
+    console.log(formatter.SEPARATOR);
   };
 
-  var selectProject = function () {
-    // read from argv
-    if (config.argv.hasOwnProperty('project')) {
-      var r = helpers.resolveProject(projects, config.argv.project);
-      if (!r) {
-        log.error('No such a project');
-        return;
-      }
+  const projects = await config.api.getProjects();
+  if (!projects) {
+    return;
+  }
 
-      project = r;
-
-      show();
-      return;
+  if (config.argv.hasOwnProperty('project')) {
+    const project = helpers.resolveProject(projects, config.argv.project);
+    if (project) {
+      show(project);
+    } else {
+      log.error('No such a project');
     }
+    return;
+  }
 
-    ui.select('Select a project to show', projects).then(function (resp) {
-      project = resp;
-    }).catch(function () {
-
-    }).finally(function () {
-      if (project !== null) {
-        show();
-      }
-    });
-  };
-
-  config.api.getProjects().then(function (resp) {
-    projects = resp;
-  }).catch(function (err) {
-    helpers.handleApiError(err);
-  }).finally(function () {
-    if (projects !== null) {
-      selectProject();
-    }
-  });
+  const project = await ui.select('Select a project to show', projects);
+  if (project) {
+    show(project);
+  }
 };

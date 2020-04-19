@@ -37,8 +37,6 @@ export default (config) => {
       localCreds(host).set(val);
     },
     login: function (cb) {
-      const self = this;
-
       const keyReceived = async (key) => {
         config.api.setApiKey(key);
 
@@ -54,7 +52,7 @@ export default (config) => {
       };
 
       const done = (key, me) => {
-        self._setCredential(key);
+        this._setCredential(key);
         console.log('');
         log.success('👍 Logged in as ' + me.name + '<' + me.email + '>');
         console.log('');
