@@ -1,72 +1,82 @@
-var fs = require('fs');
-var path = require('path');
+import fs from 'fs'
+import path from 'path';
 
-var glob = require('glob');
-var JSZip = require('jszip');
+import glob from 'glob';
+import tmp from 'tmp';
+import JSZip from 'jszip';
+import FormData from 'form-data';
 
-var ui = require('../ui');
-var utils = require('../utils');
-var log = require('../log');
-var helpers = require('../helpers');
-var formatter = require('../formatter.js');
+import *  as ui from '../ui';
+import * as utils from '../utils';
+import * as log from '../log';
+import * as helpers from '../helpers';
+import * as formatter from '../formatter.js';
 
-module.exports = function (self, config) {
-  var projects = null;
-  var project = null;
-  var folder = null;
-  var buffer = null;
-  var respProject = null;
+module.exports = async (self, config) => {
+  let projects = null;
+  let project = null;
+  let folder = null;
+  let respProject = null;
+  let filePath = null;
 
-  var done = function () {
+  const done = () => {
     log.success('🎉 Done');
-    console.log(formatter.project(respProject));
-    console.log(formatter.separator);
+    console.log(formatter.projectFormatter(respProject));
+    console.log(formatter.SEPARATOR);
   };
 
-  var send = function () {
-    var spin = ui.spinner('Deploying');
+  const send = async () => {
+    const spin = ui.spinner('Uploading');
     spin.start();
-    config.api.deploy(project.id, buffer).then(function (resp) {
-      respProject = resp;
-    }).catch(function (err) {
-      helpers.handleApiError(err);
-    }).finally(function () {
-      spin.stop();
-      if (respProject !== null) {
-        done();
-      }
+
+    const {size: fileSize} = fs.statSync('file.zip');
+    let uploaded = 0;
+
+    const form = new FormData();
+    const file = fs.createReadStream(filePath).on('data', (chunk) => {
+      uploaded += chunk.length;
+      const percent = Math.ceil((uploaded / fileSize) * 100);
+      spin.text = `Uploading ${percent}%`;
     });
+
+    form.append('file', file);
+
+    try {
+      respProject = await config.api.deploy(project.id, form);
+    } catch (e) {
+
+    } finally {
+      spin.stop();
+      fs.unlinkSync(filePath);
+    }
   };
 
-  var makeBundle = function () {
-    var paths = glob.sync(folder + '/**/**', {silent: true, absolute: true});
+  const makeBundle = async () => {
+    const paths = glob.sync(folder + '/**/**', {silent: true, absolute: true});
 
-    var files = paths.filter(function (x) {
-      return !utils.isDir(x);
-    });
+    const files = paths.filter((x) => !utils.isDir(x));
 
-    var replace = folder + '/';
+    const replace = folder + '/';
 
-    var zip = new JSZip();
+    const zip = new JSZip();
 
     files.forEach(function (file) {
-      var buff = fs.readFileSync(file);
-      var zipPath = file.replace(replace, '');
+      const buff = fs.readFileSync(file);
+      const zipPath = file.replace(replace, '');
       zip.file(zipPath, buff);
     });
 
-    zip.generateAsync({type: 'base64'}).then(function (resp) {
-      buffer = resp;
-    }).catch(function () {
-      log.error("Couldn't create bundle file");
-    }).finally(function () {
-      if (buffer !== null) {
+    const file = tmp.fileSync();
+    filePath = file.name;
+
+    zip.generateNodeStream({type: 'nodebuffer', compression: 'DEFLATE', streamFiles: true})
+      .pipe(fs.createWriteStream(filePath))
+      .on('finish', function () {
         send();
-      }
-    });
+      });
   };
 
-  var validateFolder = function (retry) {
+  const validateFolder = function (retry) {
     if (folder === '') {
       log.error('Enter a valid path!');
       if (retry) {
@@ -89,7 +99,9 @@ module.exports = function (self, config) {
     makeBundle();
   };
 
-  var selectFolder = function () {
+  const selectFolder = async () => {
+    // log.bold(`Project: ${formatter.projectName(project)}`);
+
     // read from argv
     if (config.argv.hasOwnProperty('folder')) {
       folder = config.argv.folder;
@@ -97,7 +109,7 @@ module.exports = function (self, config) {
       return;
     }
 
-    var defaultFolder = process.cwd();
+    const defaultFolder = process.cwd();
     ui.folderInput(defaultFolder).then(function (input) {
       folder = input;
     }).catch(function () {
@@ -108,40 +120,30 @@ module.exports = function (self, config) {
     });
   };
 
-  var selectProject = function () {
+  const selectProject = async () => {
     // read from argv
     if (config.argv.hasOwnProperty('project')) {
-      var r = helpers.resolveProject(projects, config.argv.project);
-      if (!r) {
-        log.error('No such a project');
+      const identifier = config.argv.project;
+      project = helpers.resolveProject(projects, identifier);
+      if (project) {
+        selectFolder();
         return;
       }
 
-      project = r;
-
-      log.bold('Project: ' + formatter.projectName(project));
-      selectFolder();
+      log.error(`No such a project: ${identifier}`);
       return;
     }
 
-    ui.select('Select a project to deploy', projects).then(function (resp) {
-      project = resp;
-    }).catch(function () {
-
-    }).finally(function () {
-      if (project !== null) {
-        selectFolder()
-      }
-    });
+    project = await ui.select('Select a project to deploy', projects);
+    if (project) {
+      selectFolder();
+      return;
+    }
+    log.info('Cancelled');
   };
 
-  config.api.getProjects().then(function (resp) {
-    projects = resp;
-  }).catch(function (err) {
-    helpers.handleApiError(err);
-  }).finally(function () {
-    if (projects !== null) {
-      selectProject();
-    }
-  });
+  projects = await config.api.getProjects();
+  if (projects) {
+    selectFolder().then()
+  }
 };

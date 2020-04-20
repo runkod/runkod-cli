@@ -49,6 +49,7 @@ export const folderInput = (defaultPath) =>
     read({
       prompt: chalk.bold('Local folder: '),
       default: defaultPath,
+      silent: false,
       edit: true
     }, function (err, answer) {
       resolve(answer.trim())

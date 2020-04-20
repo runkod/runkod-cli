@@ -1,5 +1,4 @@
 import got from 'got';
-
 import log from './log';
 
 module.exports = function (ver, baseEndpoint) {
@@ -8,25 +7,29 @@ module.exports = function (ver, baseEndpoint) {
     setApiKey: function (key) {
       this.apiKey = key;
     },
-    call: function (endpoint, method, body = null) {
-      const init = {
+    call: function (endpoint, method, jsonBody = null, formBody = null) {
+
+      let init = {
         throwHttpErrors: false,
         headers: {
-          'Content-Type': 'application/json',
           'User-Agent': 'runkod-cli-' + ver,
           'X-Runkod-Api-Key': this.apiKey
         },
         method
       };
 
-      if (body) {
-        init.body = JSON.stringify(body)
+      if (jsonBody) {
+        init = Object.assign({}, init, {
+          'Content-Type': 'application/json',
+          'body': JSON.stringify(jsonBody)
+        });
+      } else if (formBody) {
+        init.body = formBody
       }
 
       const url = `${baseEndpoint}${endpoint}`;
 
       return got(url, init).then((r) => {
-
         if ([400, 405].includes(r.statusCode)) {
           log.error(`${r.statusCode} - ${r.statusMessage}`);
           return null;
@@ -54,8 +57,8 @@ module.exports = function (ver, baseEndpoint) {
     setProjectStatus: function (project_id, statusCode) {
       return this.call('/projects/' + project_id + '/status', 'PUT', {status: statusCode});
     },
-    deploy: function (project_id, data) {
-      return this.call('/projects/' + project_id + '/deploy', 'POST', {data: data});
+    deploy: function (project_id, form) {
+      return this.call('/projects/' + project_id + '/deployments', 'POST', null, form);
     }
   }
 };

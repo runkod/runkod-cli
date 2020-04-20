@@ -12,6 +12,7 @@
     "chalk": "^3.0.0",
     "cli-table3": "^0.5.1",
     "filesize": "^6.1.0",
+    "form-data": "^3.0.0",
     "glob": "^7.1.6",
     "got": "^10.7.0",
     "inquirer": "^7.0.4",
@@ -20,7 +21,8 @@
     "moment": "^2.24.0",
     "netrc": "^0.1.4",
     "ora": "^4.0.3",
-    "read": "^1.0.7"
+    "read": "^1.0.7",
+    "tmp": "^0.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
