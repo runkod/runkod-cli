@@ -7,11 +7,27 @@ import * as constants from './constants';
 export const SEPARATOR = '-'.repeat(80);
 
 export const projectName = (project) => {
-  if (project.domain && project.domain.name) {
-    return project.domain.name + '(' + project.name + ')';
+  const name = project.address;
+  const link = `https://${project.address}`;
+
+  let rv = terminalLink(chalk.bold(name), link, {
+    fallback: () => {
+      return chalk.bold(name);
+    }
+  });
+
+  if (project.domainRecord) {
+    const rLink = `https://${project.domainRecord.name}`;
+    const recordName = project.domainRecord.name;
+    rv += ' -> ';
+    rv += terminalLink(chalk.bold(recordName), rLink, {
+      fallback: () => {
+        return chalk.bold(recordName);
+      }
+    });
   }
 
-  return project.name;
+  return rv;
 };
 
 export const projectStatus = (project) => {
@@ -28,29 +44,13 @@ export const projectStatus = (project) => {
 export const projectFormatter = (project) => {
   let rv = '';
 
-  const name = project.address;
-  const link = `https://${project.address}`;
   const id = project.id;
   const status = projectStatus(project);
   const lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
 
   rv += SEPARATOR + '\n';
 
-  rv += terminalLink(chalk.bold(name), link, {
-    fallback: () => {
-      return chalk.bold(name);
-    }
-  });
-
-  if (project.domainRecord) {
-    const dLink = `https://${project.domainRecord.name}`;
-    rv += ' -> ';
-    rv += terminalLink(chalk.bold(project.domainRecord.name), dLink, {
-      fallback: () => {
-        return chalk.bold(project.domainRecord.name);
-      }
-    });
-  }
+  rv += projectName(project);
 
   rv += '\n\n';
 

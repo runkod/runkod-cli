@@ -32,7 +32,7 @@ module.exports = async (self, config) => {
     return;
   }
 
-  const project = await ui.select('Select a project to show', projects);
+  const project = await ui.selectProject('Select a project to show', projects).catch();
   if (project) {
     show(project);
   }

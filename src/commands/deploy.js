@@ -193,7 +193,7 @@ module.exports = async (self, config) => {
     }
 
     // select a project from list
-    project = await ui.select(_t('deploy.select-project'), projects).catch();
+    project = await ui.selectProject(_t('deploy.select-project'), projects).catch();
     if (project) {
       projectSelected();
       return;

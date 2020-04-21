@@ -2,6 +2,10 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import chalk from 'chalk';
 import read from 'read';
+import prompts from 'prompts';
+import terminalLink from 'terminal-link';
+
+import * as formatter from './formatter';
 
 export const input = (placeholder, required = '') =>
   inquirer
@@ -59,30 +63,38 @@ export const folderInput = (defaultPath) =>
   });
 
 
-export const select = (title, options) => {
+export const select = (title, choices) => {
   const cancel = '---Cancel---';
 
-  options.unshift({name: cancel});
+  choices.unshift({title: cancel, value: null});
 
-  return inquirer
-    .prompt([
-      {
-        type: 'list',
-        name: 'answer',
-        message: title,
-        choices: options,
-        pageSize: 20
-      }
-    ])
-    .then((value) => {
-      // cancelled
-      if (value.answer === cancel) {
-        return null;
-      }
+  return prompts([
+    {
+      type: 'select',
+      name: 'answer',
+      message: title,
+      choices,
+      initial: 1
+    }
+  ]).then(r => {
+    return choices.find((x) => x.value === r.answer);
+  })
+};
 
-      // return selected item
-      return options.find((x) => x.name === value.answer);
-    });
+export const selectProject = (title, projects) => {
+  const choices = projects.map((project) => {
+    return {
+      value: project.id,
+      title: formatter.projectName(project)
+    }
+  });
+
+  return select(title, choices).then((r) => {
+    if (r && r.value) {
+      return projects.find((x) => x.id === r.value);
+    }
+    return null;
+  });
 };
 
 export const confirm = (title) => {
