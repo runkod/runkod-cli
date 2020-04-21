@@ -18,12 +18,9 @@ module.exports = function (ver, baseEndpoint) {
       };
 
       if (jsonBody) {
-        init = Object.assign({}, init, {
-          'Content-Type': 'application/json',
-          'body': JSON.stringify(jsonBody)
-        });
+        init.json = jsonBody;
       } else if (formBody) {
-        init.body = formBody
+        init.body = formBody;
       }
 
       const url = `${baseEndpoint}${endpoint}`;
@@ -44,11 +41,23 @@ module.exports = function (ver, baseEndpoint) {
         return body;
       })
     },
-    me: () => this.call('/me', 'GET'),
-    getProjects: () => this.call('/projects', 'GET'),
-    createProject: (name) => this.call('/projects', 'POST', {name}),
-    setProjectStatus: (project, statusCode) => this.call('/projects/' + project + '/status', 'PUT', {status: statusCode}),
-    deploy: (project, form) => this.call('/projects/' + project + '/deployments', 'POST', null, form),
-    activateDeployment: (project, deployment) => this.call(`/projects/${project}/deployments/${deployment}`, 'PUT')
+    me: function () {
+      return this.call('/me', 'GET');
+    },
+    getProjects: function () {
+      return this.call('/projects', 'GET');
+    },
+    createProject: function (name) {
+      return this.call('/projects', 'POST', {name});
+    },
+    setProjectStatus: function (project, statusCode) {
+      return this.call('/projects/' + project + '/status', 'PUT', {status: statusCode});
+    },
+    deploy: function (project, form) {
+      return this.call('/projects/' + project + '/deployments', 'POST', null, form)
+    },
+    activateDeployment: function (project, deployment) {
+      return this.call(`/projects/${project}/deployments/${deployment}`, 'PUT')
+    }
   }
 };

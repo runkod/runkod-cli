@@ -27,7 +27,7 @@ export const projectStatus = (project) => {
 export const projectFormatter = (project) => {
   let rv = '';
 
-  const name = project.name;
+  const name = project.address;
   const id = project.id;
   const status = projectStatus(project);
   const lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
