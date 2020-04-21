@@ -1,5 +1,5 @@
 import * as ui from '../ui';
-import log from '../log';
+import * as log from '../log';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter.js';
 import {_t} from '../i18n';

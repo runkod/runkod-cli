@@ -1,7 +1,7 @@
 import * as ui from '../ui';
 import localCreds from '../creds';
 import * as utils from '../utils';
-import log from '../log';
+import * as log from '../log';
 import {_t} from '../i18n';
 
 export default (config) => {

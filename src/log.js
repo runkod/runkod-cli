@@ -1,23 +1,21 @@
-var chalk = require('chalk');
+import chalk from 'chalk';
 
-var info = function (msg) {
+export const info = (msg) => {
   console.log(chalk.gray(msg));
 };
 
-var warning = function (msg) {
+export const warning = (msg) => {
   console.log(chalk.yellow(msg));
 };
 
-var success = function (msg) {
+export const success = (msg) => {
   console.log(chalk.green(msg));
 };
 
-var error = function (msg) {
+export const error = (msg) => {
   console.log(chalk.red(msg));
 };
 
-var bold = function(msg){
+export const bold = (msg) => {
   console.log(chalk.bold(msg));
 };
-
-module.exports = {info: info, warning: warning, success: success, error: error, bold:bold};

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import log from '../log';
+import * as log from '../log';
 import {_t} from '../i18n';
 
 import {projectFormatter, SEPARATOR} from '../formatter.js';

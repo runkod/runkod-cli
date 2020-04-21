@@ -1,4 +1,4 @@
-import log from '../log';
+import * as log from '../log';
 import {_t} from '../i18n';
 
 module.exports = (self) => {

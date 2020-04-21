@@ -1,4 +1,4 @@
-import log from '../log';
+import * as log from '../log';
 
 module.exports = async (self, config) => {
   const me = await config.api.me();
