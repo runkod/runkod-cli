@@ -1,6 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import minimist from 'minimist';
+import chalk from 'chalk';
 
 import api from './api';
 import commands from './commands';
@@ -34,12 +35,17 @@ module.exports = (config) => {
       'deploy', 'list', 'show', 'create', 'status'
     ];
 
+    const msg = chalk.inverse.blue.bold('\nRunkod CLI ') + chalk.inverse.blue(`v${packJs.version}\n`);
+    console.log(msg);
+
+    if (cmd === 'version') {
+      return;
+    }
+
     if (cmdList.indexOf(cmd) !== -1) {
       commands(config).call(cmd)
     } else if (cmd === 'help') {
       help();
-    } else if (cmd === 'version') {
-      console.log('Runkod ' + packJs.version);
     } else {
       commands(config).call('deploy');
     }

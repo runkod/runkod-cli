@@ -1,5 +1,5 @@
 import got from 'got';
-import log from './log';
+import * as log from './log';
 
 module.exports = function (ver, baseEndpoint) {
   return {
