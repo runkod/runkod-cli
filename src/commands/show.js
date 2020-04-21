@@ -20,19 +20,19 @@ module.exports = async (self, config) => {
     const project = helpers.resolveProject(projects, identifier);
     if (project) {
       show(project);
-      return;
     } else {
-      log.error(_t('no-project', {i: identifier}));
+      log.error(_t('show.no-project', {i: identifier}));
     }
-  }
-
-  if (projects.length === 0) {
-    log.bold('You have no projects.');
-    log.info('Run `runkod create` to create your first project.');
     return;
   }
 
-  const project = await ui.selectProject('Select a project to show', projects).catch();
+  if (projects.length === 0) {
+    log.bold(_t('show.no-projects'));
+    log.info(_t('show.no-projects-hint'));
+    return;
+  }
+
+  const project = await ui.selectProject(_t('show.select-project'), projects).catch();
   if (project) {
     show(project);
   }

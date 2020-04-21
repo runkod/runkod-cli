@@ -3,7 +3,6 @@ import ora from 'ora';
 import chalk from 'chalk';
 import read from 'read';
 import prompts from 'prompts';
-import terminalLink from 'terminal-link';
 
 import * as formatter from './formatter';
 

@@ -2,9 +2,6 @@ import i18n from 'i18next';
 
 const en = {
   "login-required": "You haven't logged in yet!",
-  "no-project": "No such a project: {{i}}",
-  "no-projects": "You have no projects.",
-  "no-projects-hint": "Run `runkod create` to create your first project.",
   "login": {
     "input-label": "Enter your api key:",
     "input-error": "Empty key received",
@@ -18,8 +15,16 @@ const en = {
     "success": "✅ New project has been created."
   },
   "list": {
+    "no-projects": "You have no projects.",
+    "no-projects-hint": "Run `runkod create` to create your first project.",
     "count-label-single": "1 project",
     "count-label": "{{n}} projects"
+  },
+  "show":{
+    "no-projects": "You have no projects.",
+    "no-projects-hint": "Run `runkod create` to create your first project.",
+    "no-project": "No such a project: {{i}}",
+    "select-project": "Select a project to show: "
   },
   "deploy": {
     "select-project": "Select a project: ",

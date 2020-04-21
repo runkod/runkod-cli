@@ -13,8 +13,8 @@ module.exports = async (self, config) => {
   }
 
   if (resp.length === 0) {
-    log.bold(_t('no-projects'));
-    log.info(_t('no-projects-hint'));
+    log.bold(_t('list.no-projects'));
+    log.info(_t('list.no-projects-hint'));
     return;
   }
 
