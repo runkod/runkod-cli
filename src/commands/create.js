@@ -5,7 +5,7 @@ import {_t} from '../i18n';
 
 module.exports = async (self, config) => {
   const form = async () => {
-    const name = await ui.input(_t('create.placeholder'));
+    const name = await ui.input(_t('create.input-label'));
     submit(name).then();
   };
 

@@ -2,6 +2,7 @@ import * as ui from '../ui';
 import localCreds from '../creds';
 import * as utils from '../utils';
 import log from '../log';
+import {_t} from '../i18n';
 
 export default (config) => {
   return {
@@ -11,7 +12,7 @@ export default (config) => {
 
         if (!cred) {
           console.log('');
-          log.warning("You haven't logged in yet!");
+          log.warning(_t('login-required'));
           console.log('');
 
           this.login(() => {
@@ -53,15 +54,13 @@ export default (config) => {
 
       const done = (key, me) => {
         this._setCredential(key);
-        console.log('');
-        log.success('👍 Logged in as ' + me.name + '<' + me.email + '>');
-        console.log('');
+        log.success(_t('login.success', {name: me.name, email: me.email}));
         if (cb) {
           cb();
         }
       };
 
-      ui.passwordInput('Enter your api key:', 'Empty key received').then(keyReceived);
+      ui.passwordInput(_t('login.input-label'), _t('login.input-error')).then(keyReceived);
     },
     logout: function () {
       require('./logout')(this, config);
