@@ -68,20 +68,20 @@ export const select = (title, options) => {
     .prompt([
       {
         type: 'list',
-        name: 'name',
+        name: 'answer',
         message: title,
         choices: options,
         pageSize: 20
       }
     ])
     .then((value) => {
-      if (value.name === cancel) {
+      // cancelled
+      if (value.answer === cancel) {
         return null;
       }
 
-      return options.find((x) => {
-        return x.name === value.name;
-      });
+      // return selected item
+      return options.find((x) => x.name === value.answer);
     });
 };
 
