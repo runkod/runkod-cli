@@ -12,7 +12,7 @@ import * as utils from '../utils';
 import * as log from '../log';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter.js';
-
+import {_t} from '../i18n';
 
 module.exports = async (self, config) => {
   let projects = null;
@@ -179,7 +179,7 @@ module.exports = async (self, config) => {
         selectFolder().then();
         return;
       }
-      log.error(`No such a project: ${identifier}`);
+      log.error(_t('no-project', {i: identifier}));
       return;
     }
 

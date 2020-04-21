@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import log from '../log';
+import {_t} from '../i18n';
 
 import {projectFormatter, SEPARATOR} from '../formatter.js';
 
@@ -12,12 +13,14 @@ module.exports = async (self, config) => {
   }
 
   if (resp.length === 0) {
-    log.bold('You have no projects.');
-    log.info('Run `runkod create` to create your first project.');
+    log.bold(_t('no-projects'));
+    log.info(_t('no-projects-hint'));
     return;
   }
 
-  let screen = chalk.bold(resp.length + ' project(s)') + '\n';
+  let screen = '';
+  const countText = resp.length === 1 ? _t('list.count-label-single') : _t('list.count-label', {n: resp.length});
+  screen += chalk.bold(countText) + '\n';
 
   for (let item of resp) {
     screen += projectFormatter(item) + '\n';

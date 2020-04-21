@@ -1,7 +1,8 @@
-import ui from '../ui';
+import * as ui from '../ui';
 import log from '../log';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter.js';
+import {_t} from '../i18n';
 
 module.exports = async (self, config) => {
   const show = function (project) {
@@ -15,12 +16,18 @@ module.exports = async (self, config) => {
   }
 
   if (config.argv.hasOwnProperty('project')) {
-    const project = helpers.resolveProject(projects, config.argv.project);
+    const identifier = config.argv.project;
+    const project = helpers.resolveProject(projects, identifier);
     if (project) {
       show(project);
     } else {
-      log.error('No such a project');
+      log.error(_t('no-project', {i: identifier}));
     }
+  }
+
+  if (projects.length === 0) {
+    log.bold('You have no projects.');
+    log.info('Run `runkod create` to create your first project.');
     return;
   }
 
