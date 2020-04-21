@@ -8,7 +8,6 @@ module.exports = function (ver, baseEndpoint) {
       this.apiKey = key;
     },
     call: function (endpoint, method, jsonBody = null, formBody = null) {
-
       let init = {
         throwHttpErrors: false,
         headers: {
@@ -45,20 +44,11 @@ module.exports = function (ver, baseEndpoint) {
         return body;
       })
     },
-    me: function () {
-      return this.call('/me', 'GET');
-    },
-    getProjects: function () {
-      return this.call('/projects', 'GET');
-    },
-    createProject: function (name) {
-      return this.call('/projects', 'POST', {name});
-    },
-    setProjectStatus: function (project_id, statusCode) {
-      return this.call('/projects/' + project_id + '/status', 'PUT', {status: statusCode});
-    },
-    deploy: function (project_id, form) {
-      return this.call('/projects/' + project_id + '/deployments', 'POST', null, form);
-    }
+    me: () => this.call('/me', 'GET'),
+    getProjects: () => this.call('/projects', 'GET'),
+    createProject: (name) => this.call('/projects', 'POST', {name}),
+    setProjectStatus: (project, statusCode) => this.call('/projects/' + project + '/status', 'PUT', {status: statusCode}),
+    deploy: (project, form) => this.call('/projects/' + project + '/deployments', 'POST', null, form),
+    activateDeployment: (project, deployment) => this.call(`/projects/${project}/deployments/${deployment}`, 'PUT')
   }
 };
