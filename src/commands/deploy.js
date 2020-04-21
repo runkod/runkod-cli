@@ -87,8 +87,8 @@ module.exports = async (self, config) => {
     }
 
     // check node_modules
-    if (files.filter(x => x.indexOf('node_modules') > -1).length > 0) {
-      const msg = "You are about to deploy a folder contains 'node_modules'. You might want to choose build folder instead. Continue?";
+    if (files.filter(x => x.indexOf('node_modules/') > -1).length > 0) {
+      const msg = "You are about to deploy a folder that contains 'node_modules'. You might want to choose a build folder instead. Continue?";
       const r = await ui.confirm(msg);
       if (!r) {
         return false;
