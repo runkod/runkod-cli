@@ -1,11 +1,11 @@
-var url = require('url');
-var fs = require('fs');
+import url from 'url';
+import fs from 'fs';
 
-var hostFromUrl = function (u) {
+export const hostFromUrl = (u) => {
   return url.parse(u).hostname;
 };
 
-var isDir = function (path) {
+export const isDir = (path) => {
   try {
     return fs.lstatSync(path).isDirectory();
   } catch (e) {
@@ -13,5 +13,3 @@ var isDir = function (path) {
   }
 };
 
-
-module.exports = {hostFromUrl: hostFromUrl, isDir: isDir};

@@ -1,6 +1,6 @@
 import * as ui from '../ui';
 import localCreds from '../creds';
-import utils from '../utils';
+import * as utils from '../utils';
 import log from '../log';
 
 export default (config) => {
