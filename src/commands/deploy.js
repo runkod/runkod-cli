@@ -19,26 +19,20 @@ module.exports = async (self, config) => {
   let project = null;
   let folder = null;
   let deployment = null;
-  let filePath = null;
-
-  const done = () => {
-    log.success('🎉 Done');
-    console.log(formatter.projectFormatter(respProject));
-    console.log(formatter.SEPARATOR);
-  };
+  let bundlePath = null;
 
   const send = async () => {
-    const spin = ui.spinner('Uploading');
+    const spin = ui.spinner(_t('deploy.uploading', {p: 0}));
     spin.start();
 
-    const {size: fileSize} = fs.statSync(filePath);
+    const {size: fileSize} = fs.statSync(bundlePath);
     let uploaded = 0;
 
     const form = new FormData();
-    const file = fs.createReadStream(filePath).on('data', (chunk) => {
+    const file = fs.createReadStream(bundlePath).on('data', (chunk) => {
       uploaded += chunk.length;
       const percent = Math.ceil((uploaded / fileSize) * 100);
-      spin.text = `Uploading ${percent}%`;
+      spin.text = _t('deploy.uploading', {p: percent});
     });
 
     form.append('file', file);
@@ -46,50 +40,49 @@ module.exports = async (self, config) => {
     try {
       deployment = await config.api.deploy(project.id, form);
     } catch (e) {
-
+      throw e;
     } finally {
       spin.stop();
-      fs.unlinkSync(filePath);
+      fs.unlinkSync(bundlePath);
     }
 
-    log.success('\n🎉 Deploy completed \n');
-
+    log.success(_t('deploy.completed'));
 
     if (deployment.isActive === false) {
-      const msg = "Do you want to activate it now?";
-      const r = await ui.confirm(msg);
+      const r = await ui.confirm(_t('deploy.activate'));
       if (r) {
         await config.api.activateDeployment(project.id, deployment.id);
+        log.success(_t('deploy.activated'));
       }
     }
 
-    console.log();
+    project = await config.api.getProject(project.id).catch();
+    if (project) {
+      console.log(formatter.projectFormatter(project));
+      console.log(formatter.SEPARATOR);
+    }
   };
 
   const inspectFiles = async (files) => {
-    // html files
+    // no html files
     if (files.filter(x => x.endsWith('.html')).length === 0) {
-      // return _t('project.deploy.warning-no-html');
-      const msg = "The deployment you are uploading doesn't contain any html files. Usually web applications contain at least one html file. Continue?";
-      const r = await ui.confirm(msg);
+      const r = await ui.confirm(_t('deploy.warning-no-html')).catch();
       if (!r) {
         return false;
       }
     }
 
-    // server side files
+    // server side file detected
     if (files.filter(x => x.endsWith('.php')).length > 0) {
-      const msg = "Server side code detected. Note that Runkod doesn't provide server side code support. Continue?";
-      const r = await ui.confirm(msg);
+      const r = await ui.confirm(_t('deploy.warning-server-side')).catch();
       if (!r) {
         return false;
       }
     }
 
-    // check node_modules
+    // node_modules folder detected
     if (files.filter(x => x.indexOf('node_modules/') > -1).length > 0) {
-      const msg = "You are about to deploy a folder that contains 'node_modules'. You might want to choose a build folder instead. Continue?";
-      const r = await ui.confirm(msg);
+      const r = await ui.confirm(_t('deploy.warning-node-modules')).catch();
       if (!r) {
         return false;
       }
@@ -102,8 +95,11 @@ module.exports = async (self, config) => {
     const paths = glob.sync(folder + '/**/**', {silent: true, absolute: true});
     const files = paths.filter((x) => !utils.isDir(x));
 
+    // filter ignored files
+
     if (!await inspectFiles(files)) {
-      return false;
+      selectFolder().then();
+      return;
     }
 
     const replace = folder + '/';
@@ -117,18 +113,18 @@ module.exports = async (self, config) => {
     });
 
     const file = tmp.fileSync();
-    filePath = file.name;
+    bundlePath = file.name;
 
     zip.generateNodeStream({type: 'nodebuffer', compression: 'DEFLATE', streamFiles: true})
-      .pipe(fs.createWriteStream(filePath))
+      .pipe(fs.createWriteStream(bundlePath))
       .on('finish', function () {
         send();
       });
   };
 
   const validateFolder = function (retry) {
-    if (folder === '') {
-      log.error('Enter a valid path!');
+    if (!folder) {
+      log.error(_t('deploy.invalid-folder'));
       if (retry) {
         selectFolder();
       }
@@ -139,7 +135,7 @@ module.exports = async (self, config) => {
 
     // Must be a valid directory
     if (!utils.isDir(folder)) {
-      log.error('Please enter a valid path');
+      log.error(_t('deploy.invalid-folder'));
       if (retry) {
         selectFolder();
       }
@@ -150,8 +146,6 @@ module.exports = async (self, config) => {
   };
 
   const selectFolder = async () => {
-    console.log(`${chalk.bold('Project:')} ${project.address}`);
-
     // read from argv
     if (config.argv.hasOwnProperty('folder')) {
       folder = config.argv.folder;
@@ -160,14 +154,15 @@ module.exports = async (self, config) => {
     }
 
     const defaultFolder = process.cwd();
-    ui.folderInput(defaultFolder).then(function (input) {
-      folder = input;
-    }).catch(function () {
-    }).finally(function () {
-      if (folder !== null) {
-        validateFolder(true);
-      }
-    });
+    folder = await ui.folderInput(defaultFolder).catch();
+    if (folder) {
+      validateFolder(true);
+    }
+  };
+
+  const projectSelected = () => {
+    console.log(`${chalk.bold(_t('deploy.selected-project'))}${project.address}`);
+    selectFolder().then();
   };
 
   const selectProject = async () => {
@@ -176,35 +171,35 @@ module.exports = async (self, config) => {
       const identifier = config.argv.project;
       project = helpers.resolveProject(projects, identifier);
       if (project) {
-        selectFolder().then();
+        projectSelected();
         return;
       }
-      log.error(_t('no-project', {i: identifier}));
+      log.error(_t('deploy.no-project', {i: identifier}));
       return;
     }
 
     // no project. create a new one.
     if (projects.length === 0) {
       project = await config.api.createProject();
-      selectFolder().then();
+      projectSelected();
       return
     }
 
     // there is only 1 project. select it.
     if (projects.length === 1) {
       project = projects[0];
-      selectFolder().then();
+      projectSelected();
       return;
     }
 
     // select a project from list
-    project = await ui.select('Select a project to deploy', projects);
+    project = await ui.select(_t('deploy.select-project'), projects).catch();
     if (project) {
-      selectFolder().then();
+      projectSelected();
       return;
     }
 
-    log.info('Cancelled');
+    log.info(_t('deploy.cancelled'));
   };
 
   projects = await config.api.getProjects();

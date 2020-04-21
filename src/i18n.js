@@ -20,6 +20,20 @@ const en = {
   "list": {
     "count-label-single": "1 project",
     "count-label": "{{n}} projects"
+  },
+  "deploy": {
+    "select-project": "Select a project: ",
+    "selected-project": "Project:",
+    "no-project": "No such a project: {{i}}",
+    "invalid-folder": "Invalid path! Please enter a valid folder!",
+    "warning-no-html": "The deployment you are uploading doesn't contain any html files. Usually web applications contain at least one html file. Continue?",
+    "warning-server-side": "Server side code detected. Note that Runkod doesn't provide server side code support. Continue?",
+    "warning-node-modules": "You are about to deploy a folder that contains 'node_modules' folder. You might want to choose a build folder instead. Continue?",
+    "cancelled": "Cancelled",
+    "uploading": "Uploading {{p}}%",
+    "completed": "🎉 Deploy completed",
+    "activate": "Do you want to activate new deployment now?",
+    "activated": "✅ New deployment activated"
   }
 };
 

@@ -20,7 +20,7 @@ module.exports = async (self, config) => {
 
   let screen = '';
   const countText = resp.length === 1 ? _t('list.count-label-single') : _t('list.count-label', {n: resp.length});
-  screen += chalk.bold(countText) + '\n';
+  screen += chalk.inverse.bold(countText) + '\n';
 
   for (let item of resp) {
     screen += projectFormatter(item) + '\n';

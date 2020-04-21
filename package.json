@@ -22,6 +22,7 @@
     "netrc": "^0.1.4",
     "ora": "^4.0.3",
     "read": "^1.0.7",
+    "terminal-link": "^2.1.1",
     "tmp": "^0.1.0"
   },
   "devDependencies": {

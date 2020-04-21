@@ -52,7 +52,9 @@ export const folderInput = (defaultPath) =>
       silent: false,
       edit: true
     }, function (err, answer) {
-      resolve(answer.trim())
+      if (answer) { // can be undefined on ctrl+c
+        resolve(answer.trim());
+      }
     })
   });
 

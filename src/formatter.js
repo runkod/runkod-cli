@@ -1,5 +1,6 @@
 import moment from 'moment';
 import chalk from 'chalk';
+import terminalLink from 'terminal-link';
 
 import * as constants from './constants';
 
@@ -28,17 +29,27 @@ export const projectFormatter = (project) => {
   let rv = '';
 
   const name = project.address;
+  const link = `https://${project.address}`;
   const id = project.id;
   const status = projectStatus(project);
   const lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
 
   rv += SEPARATOR + '\n';
 
-  rv += chalk.inverse(name);
+  rv += terminalLink(chalk.bold(name), link, {
+    fallback: () => {
+      return chalk.bold(name);
+    }
+  });
 
   if (project.domainRecord) {
+    const dLink = `https://${project.domainRecord.name}`;
     rv += ' -> ';
-    rv += chalk.inverse(project.domainRecord.name);
+    rv += terminalLink(chalk.bold(project.domainRecord.name), dLink, {
+      fallback: () => {
+        return chalk.bold(project.domainRecord.name);
+      }
+    });
   }
 
   rv += '\n\n';

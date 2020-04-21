@@ -47,6 +47,9 @@ module.exports = function (ver, baseEndpoint) {
     getProjects: function () {
       return this.call('/projects', 'GET');
     },
+    getProject: function (project) {
+      return this.call(`/projects/${project}`, 'GET');
+    },
     createProject: function (name) {
       return this.call('/projects', 'POST', {name});
     },
