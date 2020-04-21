@@ -20,6 +20,7 @@ module.exports = async (self, config) => {
     const project = helpers.resolveProject(projects, identifier);
     if (project) {
       show(project);
+      return;
     } else {
       log.error(_t('no-project', {i: identifier}));
     }
