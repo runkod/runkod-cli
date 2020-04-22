@@ -5,7 +5,6 @@ import glob from 'glob';
 import tmp from 'tmp';
 import JSZip from 'jszip';
 import FormData from 'form-data';
-import chalk from 'chalk';
 
 import *  as ui from '../ui';
 import * as utils from '../utils';
@@ -15,6 +14,10 @@ import * as formatter from '../formatter.js';
 import {_t} from '../i18n';
 
 module.exports = async (self, config) => {
+
+  const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
+  const folderId = config.argv.hasOwnProperty('folder') ? config.argv.folder : null;
+
   let projects = null;
   let project = null;
   let folder = null;
@@ -147,8 +150,7 @@ module.exports = async (self, config) => {
 
   const selectFolder = async () => {
     // read from argv
-    if (config.argv.hasOwnProperty('folder')) {
-      folder = config.argv.folder;
+    if (folderId) {
       validateFolder(false);
       return;
     }
@@ -161,20 +163,18 @@ module.exports = async (self, config) => {
   };
 
   const projectSelected = () => {
-    console.log(`${chalk.bold(_t('deploy.selected-project'))}${project.address}`);
     selectFolder().then();
   };
 
   const selectProject = async () => {
     // read from argv
-    if (config.argv.hasOwnProperty('project')) {
-      const identifier = config.argv.project;
-      project = helpers.resolveProject(projects, identifier);
+    if (projectID) {
+      project = helpers.resolveProject(projects, projectID);
       if (project) {
         projectSelected();
         return;
       }
-      log.error(_t('deploy.no-project', {i: identifier}));
+      log.error(_t('deploy.no-project', {i: projectID}));
       return;
     }
 

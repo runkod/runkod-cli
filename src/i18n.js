@@ -28,7 +28,6 @@ const en = {
   },
   "deploy": {
     "select-project": "Select a project: ",
-    "selected-project": "Project:",
     "no-project": "No such a project: {{i}}",
     "invalid-folder": "Invalid path! Please enter a valid folder!",
     "warning-no-html": "The deployment you are uploading doesn't contain any html files. Usually web applications contain at least one html file. Continue?",
