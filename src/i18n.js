@@ -1,4 +1,8 @@
 import i18n from 'i18next';
+import chalk from "chalk";
+
+
+const check = chalk.green('✔');
 
 const en = {
   "login-required": "You haven't logged in yet!",
@@ -12,7 +16,7 @@ const en = {
   },
   "create": {
     "input-label": "Enter a project name or leave it empty for a random name:",
-    "success": "✅ New project has been created."
+    "success": check + " New project has been created."
   },
   "list": {
     "no-projects": "You have no projects.",
@@ -37,15 +41,16 @@ const en = {
     "uploading": "Uploading {{p}}%",
     "completed": "🎉 Deploy completed",
     "activate": "Do you want to activate new deployment now?",
-    "activated": "✅ New deployment activated"
+    "activated": check + " New deployment activated"
   },
   "status": {
     "no-projects": "You have no projects.",
     "no-projects-hint": "Run `runkod create` to create your first project.",
     "no-project": "No such a project: {{i}}",
     "select-project": "Select a project to set status:",
+    "selected-project": check + " Project:",
     "select-status": "Select status:",
-    "success": "✅ Done"
+    "success": check + " Done"
   }
 };
 

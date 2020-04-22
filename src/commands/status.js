@@ -4,6 +4,7 @@ import * as constants from '../constants';
 import {_t} from '../i18n';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter';
+import chalk from "chalk";
 
 module.exports = async (self, config) => {
   const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
@@ -19,10 +20,14 @@ module.exports = async (self, config) => {
   };
 
   const selectStatus = async () => {
+    if (projectID) {
+      console.log(`${chalk.bold(_t('status.selected-project'))} ${formatter.projectName(project)}`);
+    }
+
     const options = constants.PROJECT_STATUSES;
 
     const answer = await ui.select(_t('status.select-status'), options);
-    if (answer) {
+    if (answer && answer.value) {
       status = answer.value;
       send().then();
     }
