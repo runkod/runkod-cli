@@ -20,7 +20,7 @@ const en = {
     "count-label-single": "1 project",
     "count-label": "{{n}} projects"
   },
-  "show":{
+  "show": {
     "no-projects": "You have no projects.",
     "no-projects-hint": "Run `runkod create` to create your first project.",
     "no-project": "No such a project: {{i}}",
@@ -38,6 +38,12 @@ const en = {
     "completed": "🎉 Deploy completed",
     "activate": "Do you want to activate new deployment now?",
     "activated": "✅ New deployment activated"
+  },
+  "status": {
+    "no-projects": "You have no projects.",
+    "no-projects-hint": "Run `runkod create` to create your first project.",
+    "no-project": "No such a project: {{i}}",
+    "select-project": "Select a project to set status:"
   }
 };
 

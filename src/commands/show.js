@@ -5,6 +5,8 @@ import * as formatter from '../formatter.js';
 import {_t} from '../i18n';
 
 module.exports = async (self, config) => {
+  const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
+
   const show = function (project) {
     console.log(formatter.projectFormatter(project));
     console.log(formatter.SEPARATOR);
@@ -15,13 +17,12 @@ module.exports = async (self, config) => {
     return;
   }
 
-  if (config.argv.hasOwnProperty('project')) {
-    const identifier = config.argv.project;
-    const project = helpers.resolveProject(projects, identifier);
+  if (projectID) {
+    const project = helpers.resolveProject(projects, projectID);
     if (project) {
       show(project);
     } else {
-      log.error(_t('show.no-project', {i: identifier}));
+      log.error(_t('show.no-project', {i: projectID}));
     }
     return;
   }

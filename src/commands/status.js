@@ -1,9 +1,32 @@
-var ui = require('../ui');
-var helpers = require('../helpers');
-var log = require('../log');
-var constants = require('../constants');
+import * as ui from '../ui';
+import * as log from '../log';
+import * as constants from '../constants';
+import {_t} from "../i18n";
+import * as helpers from "../helpers";
 
-module.exports = function (self, config) {
+module.exports = async (self, config) => {
+  const projects = await config.api.getProjects();
+  if (!projects) {
+    return;
+  }
+
+  const project = await ui.selectProject(_t('status.select-project'), projects).catch();
+  if (project) {
+    // show(project);
+  }
+
+  if (config.argv.hasOwnProperty('project')) {
+    const identifier = config.argv.project;
+    const project = helpers.resolveProject(projects, identifier);
+    if (project) {
+      show(project);
+    } else {
+      log.error(_t('show.no-project', {i: identifier}));
+    }
+    return;
+  }
+
+  /*
   var listProjects = function (resp) {
     ui.select('Select a project to set status', resp).then(onProjectSelect);
   };
@@ -29,7 +52,7 @@ module.exports = function (self, config) {
       config.api.setProjectStatus(project.id, status.id).then(function () {
         log.success('> Done');
       }).catch(function (err) {
-        helpers.handleApiError(err);
+
       });
 
     } else {
@@ -38,4 +61,6 @@ module.exports = function (self, config) {
   };
 
   config.api.getProjects().then(listProjects);
+
+   */
 };
