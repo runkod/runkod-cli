@@ -1,4 +1,4 @@
-import got from 'got';
+import request from 'request';
 import * as log from './log';
 
 module.exports = function (ver, baseEndpoint) {
@@ -8,38 +8,48 @@ module.exports = function (ver, baseEndpoint) {
       this.apiKey = key;
     },
     call: function (endpoint, method, jsonBody = null, formBody = null) {
-      let init = {
-        throwHttpErrors: false,
-        headers: {
-          'User-Agent': 'runkod-cli-' + ver,
-          'X-Runkod-Api-Key': this.apiKey
-        },
-        method
-      };
-
-      if (jsonBody) {
-        init.json = jsonBody;
-      } else if (formBody) {
-        init.body = formBody;
-      }
 
       const url = `${baseEndpoint}${endpoint}`;
 
-      return got(url, init).then((r) => {
-        if ([400, 405].includes(r.statusCode)) {
-          log.error(`${r.statusCode} - ${r.statusMessage}`);
-          return null;
-        }
+      let init = {
+        url,
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'runkod-cli-' + ver,
+          'X-Runkod-Api-Key': this.apiKey
+        },
+      };
 
-        const body = JSON.parse(r.body);
+      if (jsonBody) {
+        init.body = JSON.stringify(jsonBody);
+      } else if (formBody) {
+        init.formData = formBody;
+      }
 
-        if (body.code) {
-          log.error(body.message);
-          return null;
-        }
+      return new Promise((resolve, reject) => {
+        request(init, (err, httpResp, resp) => {
 
-        return body;
-      })
+          if ([400, 405].includes(httpResp.statusCode)) {
+            log.error(`${httpResp.statusCode} - ${httpResp.statusMessage}`);
+            resolve(null);
+            return;
+          }
+
+          if (err) {
+            throw 'Connection error!';
+          }
+
+          const body = JSON.parse(resp);
+          if (body.code) {
+            log.error(body.message);
+            resolve(null);
+            return;
+          }
+
+          resolve(body);
+        });
+      });
     },
     me: function () {
       return this.call('/me', 'GET');

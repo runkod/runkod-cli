@@ -4,7 +4,6 @@ import path from 'path';
 import glob from 'glob';
 import tmp from 'tmp';
 import JSZip from 'jszip';
-import FormData from 'form-data';
 
 import *  as ui from '../ui';
 import * as utils from '../utils';
@@ -33,17 +32,15 @@ module.exports = async (self, config) => {
     const {size: fileSize} = fs.statSync(bundlePath);
     let uploaded = 0;
 
-    const form = new FormData();
+
     const file = fs.createReadStream(bundlePath).on('data', (chunk) => {
       uploaded += chunk.length;
       const percent = Math.ceil((uploaded / fileSize) * 100);
       spin.text = _t('deploy.uploading', {p: percent});
     });
 
-    form.append('file', file);
-
     try {
-      deployment = await config.api.deploy(project.id, form);
+      deployment = await config.api.deploy(project.id, {file});
     } catch (e) {
       throw e;
     } finally {
