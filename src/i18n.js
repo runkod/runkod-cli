@@ -30,8 +30,20 @@ const en = {
     "no-project": "No such a project: {{i}}",
     "select-project": "Select a project to show: "
   },
+  "status": {
+    "no-projects": "You have no projects.",
+    "no-projects-hint": "Run `runkod create` to create your first project.",
+    "no-project": "No such a project: {{i}}",
+    "select-project": "Select a project to set status:",
+    "selected-project": check + " Project:",
+    "select-status": "Select status:",
+    "success": check + " Done"
+  },
   "deploy": {
     "select-project": "Select a project: ",
+    "selected-project": check + " Project:",
+    "select-folder": "Local folder: ",
+    "selected-folder": check + " Local folder: ",
     "no-project": "No such a project: {{i}}",
     "invalid-folder": "Invalid path! Please enter a valid folder!",
     "warning-no-html": "The deployment you are uploading doesn't contain any html files. Usually web applications contain at least one html file. Continue?",
@@ -42,15 +54,6 @@ const en = {
     "uploaded": check + " Upload completed",
     "activate": "Do you want to activate new deployment now?",
     "activated": check + " New deployment activated"
-  },
-  "status": {
-    "no-projects": "You have no projects.",
-    "no-projects-hint": "Run `runkod create` to create your first project.",
-    "no-project": "No such a project: {{i}}",
-    "select-project": "Select a project to set status:",
-    "selected-project": check + " Project:",
-    "select-status": "Select status:",
-    "success": check + " Done"
   }
 };
 

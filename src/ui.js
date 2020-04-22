@@ -47,10 +47,10 @@ export const passwordInput = (placeholder, required = '') =>
     });
 
 
-export const folderInput = (defaultPath) =>
+export const folderInput = (label, defaultPath) =>
   new Promise((resolve) => {
     read({
-      prompt: chalk.bold('Local folder: '),
+      prompt: chalk.bold(label),
       default: defaultPath,
       silent: false,
       edit: true

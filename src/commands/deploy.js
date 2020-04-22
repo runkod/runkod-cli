@@ -12,6 +12,7 @@ import * as log from '../log';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter.js';
 import {_t} from '../i18n';
+import chalk from "chalk";
 
 module.exports = async (self, config) => {
 
@@ -146,6 +147,10 @@ module.exports = async (self, config) => {
       return;
     }
 
+    if (folderId) {
+      console.log(`${chalk.bold(_t('deploy.selected-folder'))}${folderId}`);
+    }
+
     makeBundle();
   };
 
@@ -158,13 +163,16 @@ module.exports = async (self, config) => {
     }
 
     const defaultFolder = process.cwd();
-    folder = await ui.folderInput(defaultFolder).catch();
+    folder = await ui.folderInput(_t('deploy.select-folder'), defaultFolder).catch();
     if (folder) {
       validateFolder(true);
     }
   };
 
   const projectSelected = () => {
+    if (projectID) {
+      console.log(`${chalk.bold(_t('deploy.selected-project'))} ${formatter.projectName(project)}`);
+    }
     selectFolder().then();
   };
 
