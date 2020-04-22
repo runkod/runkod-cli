@@ -39,7 +39,7 @@ const en = {
     "warning-node-modules": "You are about to deploy a folder that contains 'node_modules' folder. You might want to choose a build folder instead. Continue?",
     "cancelled": "Cancelled",
     "uploading": "Uploading {{p}}%",
-    "completed": "🎉 Deploy completed",
+    "uploaded": check + " Upload completed",
     "activate": "Do you want to activate new deployment now?",
     "activated": check + " New deployment activated"
   },

@@ -17,6 +17,7 @@ module.exports = async (self, config) => {
 
   const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
   const folderId = config.argv.hasOwnProperty('folder') ? config.argv.folder : null;
+  const activate = config.argv.hasOwnProperty('activate');
 
   let projects = null;
   let project = null;
@@ -49,10 +50,10 @@ module.exports = async (self, config) => {
       fs.unlinkSync(bundlePath);
     }
 
-    log.success(_t('deploy.completed'));
+    log.success(_t('deploy.uploaded'));
 
     if (deployment.isActive === false) {
-      const r = await ui.confirm(_t('deploy.activate'));
+      const r = activate ? true : await ui.confirm(_t('deploy.activate'));
       if (r) {
         await config.api.activateDeployment(project.id, deployment.id);
         log.success(_t('deploy.activated'));

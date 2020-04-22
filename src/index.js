@@ -20,7 +20,8 @@ module.exports = (config) => {
   const argvOptions = {
     alias: {
       p: 'project',
-      f: 'folder'
+      f: 'folder',
+      a: 'activate'
     }
   };
 
