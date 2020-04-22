@@ -5,6 +5,7 @@ import read from 'read';
 import prompts from 'prompts';
 
 import * as formatter from './formatter';
+import {_t} from './i18n';
 
 export const input = (placeholder, required = '') =>
   inquirer
@@ -63,7 +64,7 @@ export const folderInput = (label, defaultPath) =>
 
 
 export const select = (title, choices) => {
-  const cancel = '---Cancel---';
+  const cancel = `---${_t('g.cancel')}---`;
 
   choices.unshift({title: cancel, value: null});
 

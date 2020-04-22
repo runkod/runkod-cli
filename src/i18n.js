@@ -5,6 +5,9 @@ import chalk from "chalk";
 const check = chalk.green('✔');
 
 const en = {
+  "g": {
+    "cancel": "Cancel"
+  },
   "login-required": "You haven't logged in yet!",
   "login": {
     "input-label": "Enter your api key:",
