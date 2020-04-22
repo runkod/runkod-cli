@@ -7,7 +7,7 @@
     "runkod": "./cli.js"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=8.3.0"
   },
   "files": [
     "cli.js",
