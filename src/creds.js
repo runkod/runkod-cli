@@ -1,16 +1,16 @@
-var os = require('os');
-var path = require('path');
-var fs = require('fs');
-var netrc = require('netrc');
+import os from 'os';
+import path from 'path';
+import fs from 'fs';
+import netrc from 'netrc';
 
-module.exports = function (host) {
-  var getFile = function () {
-    var home = process.env[(/^win/.test(process.platform)) ? 'USERPROFILE' : 'HOME'];
+module.exports = (host) => {
+  const getFile = function () {
+    const home = process.env[(/^win/.test(process.platform)) ? 'USERPROFILE' : 'HOME'];
     return path.join(home, '.netrc');
   };
 
-  var get = function () {
-    var obj = {};
+  const get = () => {
+    let obj = {};
 
     try {
       obj = netrc(getFile())
@@ -24,10 +24,10 @@ module.exports = function (host) {
     }
   };
 
-  var set = function (token) {
-    var file = getFile();
+  const set = (token) => {
+    let file = getFile();
 
-    var obj = {};
+    let obj = {};
     try {
       obj = netrc(file);
     } catch (e) {
