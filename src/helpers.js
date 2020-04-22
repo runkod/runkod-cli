@@ -15,6 +15,11 @@ export const resolveProject = (projects, val) => {
     return byId;
   }
 
+  const byAddress = projects.find((x) => x.address === val);
+  if (byAddress) {
+    return byAddress;
+  }
+
   const byName = projects.find((x) => x.name === val);
   if (byName) {
     return byName;
