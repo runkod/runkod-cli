@@ -1,13 +1,19 @@
 {
-  "name": "runkod-cli",
+  "name": "@runkod/runkod-cli",
   "version": "0.0.1",
-  "description": "Runkod command line interface",
+  "description": "Runkod CLI client",
   "author": "Runkod <hello@runkod.com>",
-  "bin": "./cli.js",
-  "main": "./runkod.js",
+  "bin": {
+    "runkod": "./cli.js"
+  },
   "engines": {
     "node": ">=8"
   },
+  "files": [
+    "cli.js",
+    "src",
+    "dist"
+  ],
   "dependencies": {
     "chalk": "^3.0.0",
     "filesize": "^6.1.0",
