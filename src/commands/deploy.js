@@ -151,6 +151,7 @@ module.exports = async (self, config) => {
   const selectFolder = async () => {
     // read from argv
     if (folderId) {
+      folder = folderId;
       validateFolder(false);
       return;
     }
