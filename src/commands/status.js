@@ -1,66 +1,56 @@
 import * as ui from '../ui';
 import * as log from '../log';
 import * as constants from '../constants';
-import {_t} from "../i18n";
-import * as helpers from "../helpers";
+import {_t} from '../i18n';
+import * as helpers from '../helpers';
+import * as formatter from '../formatter';
 
 module.exports = async (self, config) => {
+  const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
+
+  let project = null;
+  let status = null;
+
+  const send = async () => {
+    project = await config.api.setProjectStatus(project.id, status);
+    log.success(_t('status.success'));
+    console.log(formatter.projectFormatter(project));
+    console.log(formatter.SEPARATOR);
+  };
+
+  const selectStatus = async () => {
+    const options = constants.PROJECT_STATUSES;
+
+    const answer = await ui.select(_t('status.select-status'), options);
+    if (answer) {
+      status = answer.value;
+      send().then();
+    }
+  };
+
   const projects = await config.api.getProjects();
   if (!projects) {
     return;
   }
 
-  const project = await ui.selectProject(_t('status.select-project'), projects).catch();
-  if (project) {
-    // show(project);
-  }
-
-  if (config.argv.hasOwnProperty('project')) {
-    const identifier = config.argv.project;
-    const project = helpers.resolveProject(projects, identifier);
+  if (projectID) {
+    project = helpers.resolveProject(projects, projectID);
     if (project) {
-      show(project);
+      selectStatus().then();
     } else {
-      log.error(_t('show.no-project', {i: identifier}));
+      log.error(_t('status.no-project', {i: projectID}));
     }
     return;
   }
 
-  /*
-  var listProjects = function (resp) {
-    ui.select('Select a project to set status', resp).then(onProjectSelect);
-  };
+  if (projects.length === 0) {
+    log.bold(_t('status.no-projects'));
+    log.info(_t('status.no-projects-hint'));
+    return;
+  }
 
-  var listOptions = function (project) {
-    var options = constants.PROJECT_STATUSES;
-
-    ui.select('Select status', options).then(function (status) {
-      onOptionSelect(status, project);
-    });
-  };
-
-  var onProjectSelect = function (project) {
-    if (project) {
-      listOptions(project);
-    } else {
-      log.info('Cancelled');
-    }
-  };
-
-  var onOptionSelect = function (status, project) {
-    if (status) {
-      config.api.setProjectStatus(project.id, status.id).then(function () {
-        log.success('> Done');
-      }).catch(function (err) {
-
-      });
-
-    } else {
-      log.info('Cancelled');
-    }
-  };
-
-  config.api.getProjects().then(listProjects);
-
-   */
+  project = await ui.selectProject(_t('status.select-project'), projects).catch();
+  if (project) {
+    selectStatus().then();
+  }
 };

@@ -43,7 +43,9 @@ const en = {
     "no-projects": "You have no projects.",
     "no-projects-hint": "Run `runkod create` to create your first project.",
     "no-project": "No such a project: {{i}}",
-    "select-project": "Select a project to set status:"
+    "select-project": "Select a project to set status:",
+    "select-status": "Select status:",
+    "success": "✅ Done"
   }
 };
 

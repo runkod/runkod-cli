@@ -4,16 +4,16 @@ module.exports = {
   PROJECT_STATUS_OFF: 3,
   PROJECT_STATUSES: [
     {
-      id: 1,
-      name: 'On'
+      value: 1,
+      title: 'On',
     },
     {
-      id: 2,
-      name: 'In Maintenance'
+      value: 2,
+      title: 'In Maintenance'
     },
     {
-      id: 3,
-      name: 'Off'
+      value: 3,
+      title: 'Off'
     }
   ]
 };
