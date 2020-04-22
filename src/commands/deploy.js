@@ -32,7 +32,6 @@ module.exports = async (self, config) => {
     const {size: fileSize} = fs.statSync(bundlePath);
     let uploaded = 0;
 
-
     const file = fs.createReadStream(bundlePath).on('data', (chunk) => {
       uploaded += chunk.length;
       const percent = Math.ceil((uploaded / fileSize) * 100);
@@ -56,6 +55,8 @@ module.exports = async (self, config) => {
         await config.api.activateDeployment(project.id, deployment.id);
         log.success(_t('deploy.activated'));
       }
+    } else {
+      log.success(_t('deploy.activated'));
     }
 
     project = await config.api.getProject(project.id).catch();
