@@ -1,13 +1,13 @@
 {
   "name": "@runkod/runkod-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Runkod CLI client",
   "author": "Runkod <hello@runkod.com>",
   "bin": {
     "runkod": "./cli.js"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "files": [
     "cli.js",
