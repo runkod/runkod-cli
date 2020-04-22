@@ -1,6 +1,6 @@
 {
   "name": "@runkod/runkod-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Runkod CLI client",
   "author": "Runkod <hello@runkod.com>",
   "bin": {
@@ -14,6 +14,10 @@
     "src",
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runkod/runkod-cli"
+  },
   "dependencies": {
     "chalk": "^3.0.0",
     "filesize": "^6.1.0",
