@@ -17,7 +17,7 @@ module.exports = function () {
     '               -a, --activate (any) - activates the new deployment if any value given \n\n' +
     '      create   Creates a new project \n\n' +
     '      list     Lists all projects of your account \n\n' +
-    '      show     Shows a particular project \n' +
+    '      show     Shows a specific project \n' +
     '               -p, --project (project id | project name | project address | domain name)\n\n' +
     '      status   Updates status of a project  \n' +
     '               -p, --project (project id | project name | project address | domain name)\n\n';
