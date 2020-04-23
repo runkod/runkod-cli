@@ -22,7 +22,7 @@ Logs you in and saves your API Key locally.
 
 Default command. Deploys a local folder to a project.
 
-#### Args
+**Args**
 
 ```
 -p, --project (project id | project name | project address | domain name)
@@ -52,9 +52,9 @@ Creates a new project.
 
 ### Show
 
-Shows a particular project
+Shows a specific project.
 
-#### Args
+**Args**
 
 `-p, --project (project id | project name | project address | domain name)`
 
@@ -70,7 +70,7 @@ Updates status of a project
 > runkod status
 ```
 
-#### Args
+**Args**
 
 `-p, --project (project id | project name | project address | domain name)`
 
