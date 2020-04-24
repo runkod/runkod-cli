@@ -56,9 +56,9 @@ export const projectFormatter = (project) => {
 
   rv += '\n\n';
 
-  rv += 'ID: ' + id + '\t';
-  rv += 'Status: ' + status + ' \t';
-  rv += 'Active Deployment: ' + activeDeploy + '\t';
+  rv += _t('project-formatter.id') + ' ' + id + '\t';
+  rv += _t('project-formatter.status') + ' ' + status + ' \t';
+  rv += _t('project-formatter.deployment') + ' ' + activeDeploy + '\t';
 
   return rv;
 };

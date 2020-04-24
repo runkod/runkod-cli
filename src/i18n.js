@@ -1,6 +1,5 @@
 import i18n from 'i18next';
-import chalk from "chalk";
-
+import chalk from 'chalk';
 
 const check = chalk.green('✔');
 
@@ -12,6 +11,11 @@ const en = {
     "on": "On",
     "maintenance": "Maintenance Mode",
     "off": "Off"
+  },
+  "project-formatter": {
+    "id": "ID:",
+    "status": "Status:",
+    "deployment": "Active Deployment:"
   },
   "login-required": "You haven't logged in yet!",
   "login": {
