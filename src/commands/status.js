@@ -1,10 +1,26 @@
+import chalk from 'chalk';
+
 import * as ui from '../ui';
 import * as log from '../log';
 import * as constants from '../constants';
 import {_t} from '../i18n';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter';
-import chalk from "chalk";
+
+const STATUS_OPTIONS = [
+  {
+    value: constants.PROJECT_STATUS_ON,
+    title: _t('project-status.on')
+  },
+  {
+    value: constants.PROJECT_STATUS_MAINTENANCE,
+    title: _t('project-status.maintenance')
+  },
+  {
+    value: constants.PROJECT_STATUS_OFF,
+    title: _t('project-status.off')
+  }
+];
 
 module.exports = async (self, config) => {
   const projectID = config.argv.hasOwnProperty('project') ? config.argv.project : null;
@@ -24,9 +40,7 @@ module.exports = async (self, config) => {
       console.log(`${chalk.bold(_t('status.selected-project'))} ${formatter.projectName(project)}`);
     }
 
-    const options = constants.PROJECT_STATUSES;
-
-    const answer = await ui.select(_t('status.select-status'), options);
+    const answer = await ui.select(_t('status.select-status'), STATUS_OPTIONS);
     if (answer && answer.value) {
       status = answer.value;
       send().then();
