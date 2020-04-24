@@ -46,7 +46,7 @@ export const projectFormatter = (project) => {
 
   const id = project.id;
   const status = projectStatus(project);
-  const lastDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
+  const activeDeploy = (project.deployment ? moment(project.deployment.created).fromNow() : '-');
 
   rv += SEPARATOR + '\n';
 
@@ -56,7 +56,7 @@ export const projectFormatter = (project) => {
 
   rv += 'ID: ' + id + '\t';
   rv += 'Status: ' + status + ' \t';
-  rv += 'Last Deploy: ' + lastDeploy + '\t';
+  rv += 'Active Deployment: ' + activeDeploy + '\t';
 
   return rv;
 };
