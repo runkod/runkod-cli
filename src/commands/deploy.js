@@ -4,6 +4,8 @@ import path from 'path';
 import glob from 'glob';
 import tmp from 'tmp';
 import JSZip from 'jszip';
+import minimatch from 'minimatch';
+import chalk from 'chalk';
 
 import *  as ui from '../ui';
 import * as utils from '../utils';
@@ -11,7 +13,7 @@ import * as log from '../log';
 import * as helpers from '../helpers';
 import * as formatter from '../formatter.js';
 import {_t} from '../i18n';
-import chalk from "chalk";
+import * as constants from '../constants';
 
 module.exports = async (self, config) => {
 
@@ -83,29 +85,31 @@ module.exports = async (self, config) => {
       }
     }
 
-    // node_modules folder detected
-    if (files.filter(x => x.indexOf('node_modules/') > -1).length > 0) {
-      const r = await ui.confirm(_t('deploy.warning-node-modules')).catch();
-      if (!r) {
-        return false;
-      }
-    }
-
     return true;
   };
 
   const makeBundle = async () => {
-    const paths = glob.sync(folder + '/**/**', {silent: true, absolute: true});
-    const files = paths.filter((x) => !utils.isDir(x));
+    const pattern = `${folder}/**/**`;
+    const paths = glob.sync(pattern, {silent: true, absolute: true});
+    const files = paths
+      .filter((x) => !utils.isDir(x))
+      .filter(x => {
+        return constants.GLOB_RULES.find(p => {
+          return minimatch(x, p, {matchBase: true});
+        }) === undefined
+      });
 
-    // filter ignored files
+    if (files.length === 0) {
+      console.info('No files mathed')
+      return;
+    }
 
     if (!await inspectFiles(files)) {
       selectFolder().then();
       return;
     }
 
-    const replace = folder + '/';
+    const replace = `${folder}/`;
 
     const zip = new JSZip();
 

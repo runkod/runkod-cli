@@ -25,6 +25,7 @@
     "i18next": "^19.4.3",
     "inquirer": "^7.0.4",
     "jszip": "^3.2.2",
+    "minimatch": "^3.0.4",
     "minimist": "^1.2.5",
     "moment": "^2.24.0",
     "netrc": "^0.1.4",

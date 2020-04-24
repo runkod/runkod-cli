@@ -15,5 +15,9 @@ module.exports = {
       value: 3,
       title: 'Off'
     }
+  ],
+  GLOB_RULES: [
+    '**/node_modules/**',
+    'Thumbs.db',
   ]
 };
