@@ -4,6 +4,8 @@ import terminalLink from 'terminal-link';
 
 import * as constants from './constants';
 
+import {_t} from './i18n';
+
 export const SEPARATOR = '-'.repeat(80);
 
 export const projectName = (project) => {
@@ -33,11 +35,11 @@ export const projectName = (project) => {
 export const projectStatus = (project) => {
   switch (project.status) {
     case constants.PROJECT_STATUS_ON:
-      return chalk.green('On');
-    case constants.PROJECT_STATUS_OFF:
-      return chalk.gray('Off');
+      return chalk.green(_t('project-status.on'));
     case constants.PROJECT_STATUS_MAINTENANCE:
-      return chalk.gray('In Maintenance');
+      return chalk.gray(_t('project-status.maintenance'));
+    case constants.PROJECT_STATUS_OFF:
+      return chalk.gray(_t('project-status.off'));
   }
 };
 
