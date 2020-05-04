@@ -16,7 +16,7 @@ export default {
   },
   "login-required": "You haven't logged in yet!",
   "login": {
-    "input-label": "Enter your api key:",
+    "input-label": "Enter your API key:",
     "input-error": "Empty key received",
     "success": "👍 Logged in as {{name}} <{{email}}>"
   },
@@ -34,16 +34,16 @@ export default {
     "count-label": "{{n}} projects"
   },
   "show": {
-    "no-projects": "You have no projects.",
+    "no-projects": "You don't have any projects.",
     "no-projects-hint": "Run `runkod create` to create your first project.",
-    "no-project": "No such a project: {{i}}",
+    "no-project": "No such project found: {{i}}",
     "select-project": "Select a project to show: "
   },
   "status": {
-    "no-projects": "You have no projects.",
+    "no-projects": "You don't have any projects.",
     "no-projects-hint": "Run `runkod create` to create your first project.",
-    "no-project": "No such a project: {{i}}",
-    "select-project": "Select a project to set status:",
+    "no-project": "No such project found: {{i}}",
+    "select-project": "Select to set project status:",
     "selected-project": check + " Project:",
     "select-status": "Select status:",
     "success": check + " Done"
@@ -53,7 +53,7 @@ export default {
     "selected-project": check + " Project:",
     "select-folder": "Local folder: ",
     "selected-folder": check + " Local folder: ",
-    "no-project": "No such a project: {{i}}",
+    "no-project": "No such project found: {{i}}",
     "invalid-folder": "Invalid path! Please enter a valid folder!",
     "warning-no-html": "The deployment you are uploading doesn't contain any html files. Usually web applications contain at least one html file. Continue?",
     "warning-server-side": "Server side code detected. Note that Runkod doesn't provide server side code support. Continue?",
