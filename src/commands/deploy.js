@@ -100,12 +100,12 @@ module.exports = async (self, config) => {
       });
 
     if (files.length === 0) {
-      console.info('No files mathed')
+      console.info('No files matched.');
       return;
     }
 
     if (!await inspectFiles(files)) {
-      selectFolder().then();
+      log.info(_t('deploy.cancelled'));
       return;
     }
 

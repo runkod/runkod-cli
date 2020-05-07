@@ -27,17 +27,16 @@ module.exports = function (ver, baseEndpoint) {
         init.formData = formBody;
       }
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         request(init, (err, httpResp, resp) => {
+          if (err) {
+            throw 'API Connection Error!';
+          }
 
           if ([400, 405].includes(httpResp.statusCode)) {
             log.error(`${httpResp.statusCode} - ${httpResp.statusMessage}`);
             resolve(null);
             return;
-          }
-
-          if (err) {
-            throw 'Connection error!';
           }
 
           const body = JSON.parse(resp);

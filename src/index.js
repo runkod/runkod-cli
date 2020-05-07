@@ -12,7 +12,7 @@ module.exports = (config) => {
   config = config || {};
 
   if (!config.endpoint) {
-    config.endpoint = 'https://api1.runkod.com';
+    config.endpoint = 'https://api.runkod.com';
   }
 
   config.api = api(packJs.version, config.endpoint);
