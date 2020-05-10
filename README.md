@@ -10,7 +10,7 @@ Runkod command line interface is available on npmjs package manager. You can eas
 
 ## Commands
 
-All commands require Runkod API Key to work. Click [here]() to get yours.
+All commands require Runkod API Key to work. Click [here](https://runkod.com/manager) to get yours.
 
 ### Login
 
