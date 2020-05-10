@@ -78,7 +78,11 @@ module.exports = async (self, config) => {
     }
 
     // server side file detected
-    if (files.filter(x => x.endsWith('.php')).length > 0) {
+    if (files.filter(x => {
+      const sp = x.split('.');
+      const ext = sp[sp.length - 1].toLowerCase();
+      return ['php', 'py', 'rb'].includes(ext);
+    }).length > 0) {
       const r = await ui.confirm(_t('deploy.warning-server-side')).catch();
       if (!r) {
         return false;
