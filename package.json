@@ -1,6 +1,6 @@
 {
   "name": "@runkod/runkod-cli",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Runkod CLI client",
   "author": "Runkod <hello@runkod.com>",
   "bin": {
