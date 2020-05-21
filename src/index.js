@@ -8,6 +8,8 @@ import commands from './commands';
 import help from './help';
 import packJs from '../package';
 
+import {readFileArgs} from './helpers';
+
 module.exports = (config) => {
   config = config || {};
 
@@ -29,7 +31,7 @@ module.exports = (config) => {
     const argv = minimist(args, argvOptions);
     const cmd = argv._[0];
 
-    config.argv = argv;
+    config.argv = {...argv, ...readFileArgs()};
 
     const cmdList = [
       'login', 'logout', 'whoami',
