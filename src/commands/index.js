@@ -30,6 +30,10 @@ export default (config) => {
       this[cmd]();
     },
     _getCredential: function () {
+      if (process.env.RUNKOD_SECRET) {
+        return process.env.RUNKOD_SECRET;
+      }
+
       const host = utils.hostFromUrl(config.endpoint);
       return localCreds(host).get();
     },
