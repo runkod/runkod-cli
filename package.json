@@ -41,6 +41,9 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5"
   },
+  "resolutions": {
+    "lodash": ">=4.17.19"
+  },
   "license": "ISC",
   "ignore": [
     "test"
